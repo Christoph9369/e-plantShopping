@@ -227,7 +227,7 @@ function ProductList() {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '1100px',
+        width: '700px',
     }
     const styleA = {
         color: 'white',
@@ -249,13 +249,17 @@ function ProductList() {
         setShowCart(false);
     };
 
-    const handleAddToCart = (product) => {
-        dispatchEvent(addItem(product));
-        setAddedToCart((prevState) => ({
-            ...prevState, 
-            [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
-        }))
-    }
+    // Function to handle adding items to the cart
+    const handleAddToCart = (plant) => {
+        // Dispatch the addItem action with the plant as payload
+        dispatch(addItem(plant));
+
+        // Update the addedToCart state to reflect the plant has been added
+        setAddedToCart(prevState => ({
+            ...prevState,
+            [plant.name]: true
+        }));
+    };
 
     return (
         <div>
@@ -281,13 +285,15 @@ function ProductList() {
                 <div className="product-grid">
                     {plantsArray.map((category, index) => (
                         <div key={index}>
-                            <h1><div>{category.category}</div></h1>
+                            <h1><div className="product-category">{category.category}</div></h1>
                             <div className="product-list">
                                 {category.plants.map((plant, plantIndex) => (
                                     <div className="product-card" key={plantIndex}>
                                         <img className="product-image" src={plant.image} alt={plant.name} />
                                         <div className="product-title">{plant.name}</div>
-                                        {/*Similarly like the above plant.name show other details like description and cost*/}
+                                        <div className="product-price">{plant.cost}</div>
+
+                                        <div className="product-description">{plant.description}</div>
                                         <button className="product-button" onClick={() => handleAddToCart(plant)}>Add to Cart</button>
                                     </div>
                                 ))}

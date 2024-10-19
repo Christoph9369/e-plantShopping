@@ -21,6 +21,12 @@ body {
     font-size: 20px;
 }
 
+.navbar .luxury {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 30px;
+}
 .navbar .ul {
     display: flex;
     justify-content: space-between;
@@ -46,6 +52,10 @@ body {
     width: 100vw;
     align-items: center;
     justify-content: center;
+}
+.product-category {
+   
+    text-align: center;
 }
 .product-list {
     display: flex;
