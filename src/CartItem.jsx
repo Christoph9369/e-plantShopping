@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
@@ -7,9 +7,23 @@ const CartItem = ({ onContinueShopping }) => {
     const cart = useSelector(state => state.cart.items);
     const dispatch = useDispatch();
 
+    const [totalQuantity, serTotalQuantity] = useState(0) // state to track total
+
+    useEffect(() => {
+        //Update total quantity whenever the cart items change
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        serTotalQuantity(total)
+    }, [cart])
+
     // Calculate total amount for all products in the cart
     const calculateTotalAmount = () => {
-        return cart.reduce((total, item) => total + item.quantity * item.cost, 0);
+        return cart.reduce((total, item) => {
+            // Convert item cost to a number by removing non-numeric characters like '$'
+            const itemCost = parseFloat(item.cost.replace(/[^0-9.-]+/g, ''));
+            // Multiply cost by quantity and add to total
+            return total + itemCost * item.quantity;
+        }, 0); // Initialize total as 0
+
 
     };
     // Continue Shopping - Trigger parent function to navigate back to plant listings
@@ -20,16 +34,16 @@ const CartItem = ({ onContinueShopping }) => {
 
     // Increment item quantity
     const handleIncrement = (item) => {
-        dispatch(updateQuantity({...item, quantity: item.quantity + 1}))
+        dispatch(updateQuantity({ ...item, quantity: item.quantity + 1 }))
     };
 
     // Decrement item quantity, if quantity is 0, remove item
     const handleDecrement = (item) => {
         if (item.quantity > 1) {
             dispatch(updateQuantity({ ...item, quantity: item.quantity - 1 }));
-          } else {
+        } else {
             dispatch(removeItem(item.name));
-          }
+        }
 
     };
     // Remove item from cart
@@ -39,7 +53,16 @@ const CartItem = ({ onContinueShopping }) => {
 
     // Calculate total cost based on quantity for an item
     const calculateTotalCost = (item) => {
-        return item.quantity * item.cost;
+        // Convert item cost to a number by removing non-numeric characters like '$'
+        const itemCost = parseFloat(item.cost.replace(/[^0-9.-]+/g, ''));
+
+        // Get item quantity
+        const itemQuantity = item.quantity;
+
+        // Calculate total cost by multiplying cost and quantity
+        const totalCost = itemCost * itemQuantity;
+
+        return totalCost;
     };
 
     return (
