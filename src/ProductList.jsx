@@ -338,7 +338,10 @@ function ProductList() {
 
                 </div>
             ) : (
-                <CartItem onContinueShopping={handleContinueShopping} />
+                <CartItem 
+                cartQuantity={cartQuantity}
+                setCartQuantity={setCartQuantity} // Pass down setCartQuantity
+                onContinueShopping={handleContinueShopping} />
             )}
         </div>
     );

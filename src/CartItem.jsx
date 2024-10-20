@@ -3,17 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
-const CartItem = ({ onContinueShopping }) => {
+const CartItem = ({ setCartQuantity,onContinueShopping }) => {
     const cart = useSelector(state => state.cart.items);
     const dispatch = useDispatch();
 
-    const [totalQuantity, serTotalQuantity] = useState(0) // state to track total
-
+    // Update total cart quantity whenever the cart changes
     useEffect(() => {
         //Update total quantity whenever the cart items change
         const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-        serTotalQuantity(total)
-    }, [cart])
+        setCartQuantity(total)
+    }, [cart, setCartQuantity])
 
     // Calculate total amount for all products in the cart
     const calculateTotalAmount = () => {
