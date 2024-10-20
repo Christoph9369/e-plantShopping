@@ -261,11 +261,20 @@ function ProductList() {
         // Update the addedToCart state to reflect the plant has been added
         setAddedToCart(prevState => ({
             ...prevState,
-            [plant.name]: true
+            [plant.name]: true // Mark this plant as added
         }));
         // Increase the total quantity in the cart
         setCartQuantity(cartQuantity + 1);
     };
+    //update Cart icon
+    const handleRemoveFromCart = (plantName) => {
+        setAddedToCart(prevState => ({
+            ...prevState,
+            [plantName]: false,  // Mark this plant as removed
+        }));
+    };
+
+    
 
     return (
         <div>
@@ -327,8 +336,8 @@ function ProductList() {
                                         <button 
                                         className="product-button"
                                          onClick={() => handleAddToCart(plant)}
-                                         disabled={addedToCart[plant.name]}// Disable button if already added
-                                         >{addedToCart[plant.name] ? 'Added to cart' : 'Add to Cart'}</button>
+                                         disabled={!!addedToCart[plant.name]}// Disable button if already added
+                                         >{addedToCart[plant.name] ? 'Added' : 'Add to Cart'}</button>
                                     </div>
                                 ))}
                             </div>
@@ -341,7 +350,9 @@ function ProductList() {
                 <CartItem 
                 cartQuantity={cartQuantity}
                 setCartQuantity={setCartQuantity} // Pass down setCartQuantity
-                onContinueShopping={handleContinueShopping} />
+                onContinueShopping={handleContinueShopping} 
+                handleRemoveFromCart={handleRemoveFromCart} //Pass function to remove item
+                />
             )}
         </div>
     );
